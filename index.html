@@ -199,6 +199,7 @@
     .discount-line-total{text-align:right;white-space:nowrap}
     .discount-summary{margin-top:18px}
     .discount-summary>div{display:flex;justify-content:flex-start;gap:12px;gap:12px;padding:5px 0}
+    #sumDetails,#modalDetails{white-space:normal;overflow-wrap:anywhere;text-align:right}
     @media(max-width:650px){
       .discount-row{grid-template-columns:1fr 90px}
       .discount-row select{grid-column:1/2}
@@ -1392,6 +1393,51 @@ button{
   }
 }
 
+/* v45 — readable discount breakdown */
+.discount-detail-summary{align-items:stretch !important;flex-direction:column !important;gap:8px !important;}
+.discount-detail-row{align-items:stretch;flex-direction:column;gap:8px !important;}
+.discount-detail-summary > .muted,
+.discount-detail-row > span:first-child{display:block;width:100%;text-align:left;}
+.discount-detail-list{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  flex:1;
+  min-width:0;
+  width:100%;
+}
+.discount-detail-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:7px 9px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+  line-height:1.25;
+}
+.discount-detail-pack{font-weight:750;color:#f1f1f1;white-space:nowrap;}
+.discount-detail-badge{
+  flex:0 0 auto;
+  padding:3px 7px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  background:#171717;
+  color:#bdbdbd;
+  font-size:10px;
+  font-weight:750;
+  white-space:nowrap;
+}
+.discount-detail-badge.no-discount{color:#777;border-color:rgba(255,255,255,.06);background:#101010;}
+.discount-detail-empty{color:#777;}
+#sumDetails,#modalDetails{text-align:left !important;}
+@media(max-width:520px){
+  .result-modal-row.discount-detail-row{display:grid;grid-template-columns:72px 1fr;gap:10px;}
+  .discount-detail-item{padding:7px 8px;}
+  .discount-detail-pack{font-size:12px;}
+}
+
 </style>
 </head>
 <body>
@@ -1556,7 +1602,7 @@ button{
             <strong class="discount-line-total">0 บาท</strong>
           </div>
                     <div class="discount-row fixed-discount-row" data-pack="2227" data-price="855" data-fixed3="830" data-fixed10="770">
-            <div class="discount-pack"><strong>2,227 กระดุม</strong><span>855 บาท</span></div>
+            <div class="discount-pack"><strong>2,227 กระดุม</strong><span>855 บาท/แพ็ก</span></div>
 
             <div class="qty-stepper" aria-label="จำนวนแพ็ก 2227">
               <button type="button" class="qty-btn minus" aria-label="ลดจำนวน" title="ลดจำนวน">
@@ -1577,7 +1623,7 @@ button{
             <strong class="discount-line-total">0 บาท</strong>
           </div>
           <div class="discount-row fixed-discount-row" data-pack="3663" data-price="1430" data-fixed3="1360" data-fixed10="1260">
-            <div class="discount-pack"><strong>3,663 กระดุม</strong><span>1,430 บาท</span></div>
+            <div class="discount-pack"><strong>3,663 กระดุม</strong><span>1,430 บาท/แพ็ก</span></div>
 
             <div class="qty-stepper" aria-label="จำนวนแพ็ก 3663">
               <button type="button" class="qty-btn minus" aria-label="ลดจำนวน" title="ลดจำนวน">
@@ -1598,7 +1644,7 @@ button{
             <strong class="discount-line-total">0 บาท</strong>
           </div>
           <div class="discount-row fixed-discount-row" data-pack="7249" data-price="2770" data-fixed3="2720" data-fixed10="2550">
-            <div class="discount-pack"><strong>7,249 กระดุม</strong><span>2,770 บาท</span></div>
+            <div class="discount-pack"><strong>7,249 กระดุม</strong><span>2,770 บาท/แพ็ก</span></div>
 
             <div class="qty-stepper" aria-label="จำนวนแพ็ก 7249">
               <button type="button" class="qty-btn minus" aria-label="ลดจำนวน" title="ลดจำนวน">
@@ -1623,6 +1669,7 @@ button{
         <div class="result discount-summary">
           <div><span class="muted">กระดุมรวม</span><strong id="sumButtons">0 กระดุม</strong></div>
           <div><span class="muted">ราคาปกติรวม</span><strong id="sumNormal">0 บาท</strong></div>
+          <div class="discount-detail-summary"><span class="muted">ส่วนลด</span><div id="sumDetails" class="discount-detail-list"><span class="discount-detail-empty">-</span></div></div>
           <div><span class="muted">ราคาหลังส่วนลด</span><strong id="sumDiscount">0 บาท</strong></div>
         </div>
 
@@ -1669,7 +1716,7 @@ button{
         <div class="result-modal-breakdown">
           <div class="result-modal-row"><span>กระดุมรวม</span><strong id="modalButtons">0 กระดุม</strong></div>
           <div class="result-modal-row"><span>ราคาก่อนส่วนลด</span><strong id="modalNormal">0 บาท</strong></div>
-          <div class="result-modal-row"><span>ส่วนลดรวม</span><strong id="modalSaved">0 บาท</strong></div>
+          <div class="result-modal-row discount-detail-row"><span>ส่วนลด</span><div id="modalDetails" class="discount-detail-list"><span class="discount-detail-empty">-</span></div></div>
         </div>
 
         <button id="modalDoneBtn" class="result-modal-done" type="button">เรียบร้อย</button>
@@ -1707,7 +1754,7 @@ button{
       </div>
     </div>
 
-   
+    <div class="foot">JAXEN · Website by Yuimellkub · หากต้องการแก้ไข/อัปเดตเว็บ กรุณาติดต่อผู้จัดทำ</div>
   </main>
 
 <script>
@@ -2049,8 +2096,20 @@ document.getElementById('clearBtn').onclick=()=>{
   `;
 };
 
+function renderDiscountDetails(parts){
+  if(!parts.length) return '<span class="discount-detail-empty">-</span>';
+  return parts.map(({pack,count,pct})=>`
+    <div class="discount-detail-item">
+      <span class="discount-detail-pack">${pack.toLocaleString()} × ${count}</span>
+      ${pct > 0
+        ? `<span class="discount-detail-badge">ลด ${pct}%</span>`
+        : `<span class="discount-detail-badge no-discount">ไม่ลด</span>`}
+    </div>`).join('');
+}
+
 function calculateDiscountRows(){
   let buttons=0, normal=0, discounted=0;
+  const detailParts=[];
 
   document.querySelectorAll('.discount-row').forEach(row=>{
     const pack=Number(row.dataset.pack);
@@ -2066,15 +2125,10 @@ function calculateDiscountRows(){
       const fixed10=Number(row.dataset.fixed10);
       const normalUnit=price;
 
-      const finalUnit =
-        pct === 3 ? fixed3 :
-        pct === 10 ? fixed10 :
-        normalUnit;
-
+      const finalUnit = pct === 3 ? fixed3 : pct === 10 ? fixed10 : normalUnit;
       lineNormal = normalUnit * count;
       lineFinal = finalUnit * count;
     }else{
-      // Ordinary packs: calculate percentage and round each line upward.
       lineFinal=count > 0 ? Math.ceil(lineNormal*(1-pct/100)) : 0;
     }
 
@@ -2082,16 +2136,18 @@ function calculateDiscountRows(){
     normal += lineNormal;
     discounted += lineFinal;
 
-    row.querySelector('.discount-line-total').textContent =
-      `${lineFinal.toLocaleString()} บาท`;
+    if(count > 0) detailParts.push({pack,count,pct});
+
+    row.querySelector('.discount-line-total').textContent = `${lineFinal.toLocaleString()} บาท`;
   });
 
   document.getElementById('sumButtons').textContent=`${buttons.toLocaleString()} กระดุม`;
   document.getElementById('sumNormal').textContent=`${normal.toLocaleString()} บาท`;
-  document.getElementById('sumDiscount').textContent=
-    `${discounted.toLocaleString()} บาท`;
+  const sumDetails=document.getElementById('sumDetails');
+  if(sumDetails) sumDetails.innerHTML=renderDiscountDetails(detailParts);
+  document.getElementById('sumDiscount').textContent=`${discounted.toLocaleString()} บาท`;
 
-  return {buttons,normal,discounted};
+  return {buttons,normal,discounted,details:detailParts};
 }
 
 
@@ -2116,10 +2172,10 @@ document.getElementById('discountBtn').onclick=()=>{
   playPop();
   animateResult(document.querySelector('.discount-summary'));
 
-  const saved = Math.max(0, result.normal - result.discounted);
   document.getElementById('modalButtons').textContent = `${result.buttons.toLocaleString()} กระดุม`;
   document.getElementById('modalNormal').textContent = `${result.normal.toLocaleString()} บาท`;
-  document.getElementById('modalSaved').textContent = `${saved.toLocaleString()} บาท`;
+  const modalDetails=document.getElementById('modalDetails');
+  if(modalDetails) modalDetails.innerHTML=renderDiscountDetails(result.details || []);
   document.getElementById('modalFinal').textContent = `${result.discounted.toLocaleString()} บาท`;
 
   const modal = document.getElementById('resultModal');
